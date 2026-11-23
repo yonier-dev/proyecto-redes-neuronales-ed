@@ -29,7 +29,6 @@ def crearGraphics(ventana):
 
    
 
-    grafica.legend()
     canvas = FigureCanvasTkAgg(figura,master=ventana)
     canvas.draw()
     return canvas

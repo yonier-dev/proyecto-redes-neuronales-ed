@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font as tkfont
 from tkinter import ttk#Para JComboBox
 from guiGraphic import graphics#Para comunicarme con la clase graphics
 
@@ -82,7 +83,10 @@ def iniciar():
     ventana.title("Simulador de Red Neuronal")
     ventana.configure(bg="#eef2f7")
     ventana.geometry("900x600")#SetBounds pero en python
-    ventana.option_add("*Font", ("Segoe UI", 10))
+    # Fuente disponible de forma multiplataforma (Windows/Linux)
+    _fuentes_disponibles = set(tkfont.families(ventana))
+    _FONT = "Segoe UI" if "Segoe UI" in _fuentes_disponibles else ("DejaVu Sans" if "DejaVu Sans" in _fuentes_disponibles else ("Helvetica" if "Helvetica" in _fuentes_disponibles else "TkDefaultFont"))
+    ventana.option_add("*Font", (_FONT, 10))
 
     style = ttk.Style()
     style.theme_use("clam")
@@ -95,7 +99,7 @@ def iniciar():
         text="Simulador Red Neuronal",
         bg="#eef2f7",
         fg="#0f172a",
-        font=("Segoe UI", 18, "bold")
+        font=(_FONT, 18, "bold")
     )
     ventana.resizable(False,False)#Para que no se redimencione la pantalla
 
@@ -103,9 +107,9 @@ def iniciar():
     textFrame = tk.Frame(ventana, bg="#ffffff", highlightthickness=1, highlightbackground="#dbe4f0")
     plotFrame = tk.Frame(ventana, bg="#ffffff", highlightthickness=1, highlightbackground="#dbe4f0")
 
-    titlePlot = tk.Label(plotFrame, text="Grafica", bg="#ffffff", fg="#0f172a", font=("Segoe UI", 11, "bold"))
-    titleControls = tk.Label(controlFrame, text="Controles", bg="#ffffff", fg="#0f172a", font=("Segoe UI", 11, "bold"))
-    titleOutput = tk.Label(textFrame, text="Salida", bg="#ffffff", fg="#0f172a", font=("Segoe UI", 11, "bold"))
+    titlePlot = tk.Label(plotFrame, text="Grafica", bg="#ffffff", fg="#0f172a", font=(_FONT, 11, "bold"))
+    titleControls = tk.Label(controlFrame, text="Controles", bg="#ffffff", fg="#0f172a", font=(_FONT, 11, "bold"))
+    titleOutput = tk.Label(textFrame, text="Salida", bg="#ffffff", fg="#0f172a", font=(_FONT, 11, "bold"))
 
     textEpoch = tk.Label(controlFrame,text="Veces que Quiero Entrenar La redNeuronal", bg="#ffffff", fg="#334155")
     textTipoFuncion = tk.Label(controlFrame,text="Selecciona Tipo de Funcion a Entrenar", bg="#ffffff", fg="#334155")
