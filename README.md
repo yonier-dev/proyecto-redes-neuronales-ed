@@ -25,6 +25,8 @@ los parametros aprendidos en cada iteracion.
 - `numpy`
 - `matplotlib`
 - `tkinter` (incluido con Python en la mayoria de instalaciones)
+- En Linux, si la ventana no abre por falta de fuentes, instala un paquete de
+  fuentes (por ejemplo `ttf-dejavu` en Arch o `fonts-dejavu` en Debian/Ubuntu).
 
 ## Instalacion
 
