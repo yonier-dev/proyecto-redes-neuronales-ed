@@ -9,6 +9,40 @@ prediccion, ademas de un registro detallado del entrenamiento.
 
 ---
 
+## 🛠️ Instalacion y ejecucion (entorno virtual recomendado)
+
+Para evitar conflictos con otras instalaciones de Python, se recomienda usar un
+entorno virtual.
+
+**Linux / macOS:**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 project/main.py
+```
+
+**Windows (PowerShell):**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python project\main.py
+```
+
+**Windows (CMD):**
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -r requirements.txt
+python project\main.py
+```
+
+---
+
 ## 🧭 Estructura General de la Interfaz
 
 La ventana (900 x 600 px) se organiza en tres zonas:
