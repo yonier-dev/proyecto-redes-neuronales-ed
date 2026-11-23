@@ -1,150 +1,122 @@
-# Neural ODE Simulator
+# Simulador de Red Neuronal
 
-Simulador interactivo que visualiza el aprendizaje de redes neuronales
-como un sistema dinamico regido por Ecuaciones Diferenciales Ordinarias (EDO).
+Aplicacion de escritorio (Tkinter) que muestra como una red neuronal pequena
+**aprende por descenso de gradiente** a ajustar distintas funciones matematicas.
+El usuario elige el tipo de funcion y los coeficientes objetivo; la red comienza
+con pesos aleatorios, entrena durante un numero de iteraciones (epochs) y grafica
+los datos reales frente a la prediccion de la red, junto con el error (loss) y
+los parametros aprendidos en cada iteracion.
 
-## Que es esto?
+## Caracteristicas
 
-Este proyecto demuestra la conexion profunda entre **redes neuronales** y
-**ecuaciones diferenciales**. El descenso de gradiente ES una EDO:
-
-```
-dW/dt = -n * grad(L(W))    (EDO en el espacio de pesos)
-dz/dt = F_theta(z)          (EDO en el espacio de estados)
-```
-
-La aplicacion resuelve ambas EDOs numericamente y visualiza todo en tiempo real.
-
-## Visualizaciones
-
-| # | Visualizacion | Descripcion |
-|---|---------------|-------------|
-| 1 | Trayectoria 2D + Campo Vectorial | Streamplot con trayectoria degradada por tiempo |
-| 2 | Paisaje de Perdida 3D | Superficie w1 vs w2 vs Loss con bola animada |
-| 3 | Convergencia (4 plots) | Loss, norma del gradiente, pesos, tasa de cambio |
-| 4 | Heatmap de Activaciones | Mapas tanh(w1*x + w2*y + b) para dx/dt y dy/dt |
-| 5 | Red Neuronal Animada | Grafo con conexiones coloreadas por peso |
+- 9 tipos de funcion a aprender:
+  Lineal, Cuadratica, Cubica, Logaritmica, Exponencial, Trigonometrica (seno),
+  Circunferencia, Radical (raiz cuadrada) y Valor Absoluto.
+- Interfaz grafica con Tkinter: grafica, controles y registro de entrenamiento.
+- Coeficientes objetivo configurables (`W`, `B` y `W2` segun la funcion).
+- Numero de iteraciones (epochs) configurable.
+- Descenso de gradiente con gradientes analiticos y funcion de perdida MSE.
+- Grafica con datos reales (puntos/linea azul) y prediccion de la red (linea roja).
+- Registro por epoch del error y de los pesos aprendidos.
 
 ## Requisitos
 
-- Python 3.10+
-- numpy, scipy, matplotlib, PyQt5, pytest
+- Python 3.8+
+- `numpy`
+- `matplotlib`
+- `tkinter` (incluido con Python en la mayoria de instalaciones)
 
 ## Instalacion
 
 ```bash
-git clone https://github.com/yonier-123/proyecto-redes-neuronales-ed.git
+git clone https://github.com/yonier-dev/proyecto-redes-neuronales-ed.git
 cd proyecto-redes-neuronales-ed/project
-pip install -r requirements.txt
+pip install numpy matplotlib
 ```
 
 ## Uso
 
 ```bash
-# Aplicacion interactiva (MVP) - default
+# Ejecutar la aplicacion (desde la carpeta project/)
 python main.py
-
-# Demos estaticas por consola
-python main.py --mode all                           # Panel con todos los presets
-python main.py --mode static --preset circulo       # Un preset con campo vectorial
-python main.py --mode train --optimizer adam         # Entrenamiento con Adam
-python main.py --mode activations                   # Heatmaps de activaciones
-
-# Opciones de entrenamiento
-python main.py --mode train --preset espiral_entrada --optimizer momentum --lr 0.05 --epochs 300
 ```
 
-## Controles de la UI
+En Linux/macOS puede ser necesario usar `python3`:
 
-| Control | Funcion |
-|---------|---------|
-| PLAY | Inicia el entrenamiento |
-| PAUSE | Pausa el entrenamiento |
-| RESET | Reinicia pesos y graficas |
-| Preset | circulo, espiral_entrada, espiral_salida, punto_fijo, oscilacion, caos |
-| Optimizador | SGD, Momentum, Adam |
-| Solver | Euler, RK4 |
-| Learning Rate | Slider logaritmico (0.0001 - 0.1) |
-| Velocidad | 1x - 10x |
-| Pesos manuales | Sliders para w1, w2, w3, w4, b1, b2 |
-| EXPORT PNG | Guarda las 5 graficas como imagenes |
+```bash
+python3 main.py
+```
+
+## Como usar la aplicacion
+
+1. Ejecuta `python main.py`.
+2. En **Selecciona Tipo de Funcion a Entrenar** elige la funcion que quieres que la red aprenda.
+3. Escribe en **Veces que Quiero Entrenar La redNeuronal** el numero de iteraciones (epochs).
+4. Ingresa los coeficientes objetivo en **W**, **B** y, si la funcion lo requiere, **W2**.
+   (Al seleccionar una funcion se habilitan/deshabilitan las casillas correspondientes.)
+5. Pulsa **Entrenar Red Neuronal**.
+6. Observa la grafica (datos reales vs prediccion) y el panel **Salida** con el
+   detalle epoch por epoch.
+
+Si dejas el campo de epochs vacio, la aplicacion usa valores por defecto
+(30 epochs, W=1, B=0, W2=1).
+
+## Funciones disponibles
+
+| Funcion (combo) | Datos reales (objetivo) | Parametros de la red |
+|-----------------|--------------------------|----------------------|
+| FuncionLineal | `y = W*x + B` | `w, b` |
+| FuncionCuadratica | `y = W*x^2 + W2*x + B` | `w, b, z` |
+| FuncionCubica | `y = W*x^3 + W2*x^2 + B*x` | `w, b, z` |
+| FuncionLogaritmica | `y = W*ln(x) + B` | `w, b` |
+| FuncionExponencial | `y = W*e^(W2*x) + B` | `w, b, z` |
+| FuncionTrigonometrica | `y = W*sin(W2*x) + B` | `w, b, z` |
+| FuncionCircunferencia | `(x-W2)^2 + (y-B)^2 = W^2` | `cx=z, cy=b, r=w` |
+| FuncionRadical | `y = W*sqrt(x) + B` | `w, b` |
+| FuncionValorAbsoluto | `y = W*abs(x) + B` | `w, b` |
+
+Notas por funcion:
+- **FuncionCircunferencia**: `W` es el radio, `B` el centro en Y y `W2` el centro en X.
+- **FuncionLogaritmica**: los datos se generan con `x` en `[0.1, 2]`.
+- **FuncionRadical**: los datos se generan con `x >= 0`.
 
 ## Estructura del proyecto
 
 ```
 project/
-  config.py                  Parametros globales
-  main.py                    Punto de entrada CLI + GUI
-  requirements.txt           Dependencias
-  core/
-    neural_field.py           Red neuronal como campo de velocidades
-    ode_solver.py             Solvers: Euler + RK45 (scipy)
-    trainer.py                Descenso de gradiente por diferencias finitas
-  simulation/
-    presets.py                6 configuraciones predefinidas
-    optimizers.py             SGD, Momentum, Adam
-  visualization/
-    static_plot.py            Graficas estaticas (matplotlib)
-    animator.py               Componentes animados para la UI
-  ui/
-    controls.py               Interfaz PyQt5 con tema oscuro
-  tests/
-    test_solver.py            33 tests unitarios
-    test_integration.py       12 tests de integracion
+  main.py                      Punto de entrada de la aplicacion
+  guiGraphic/
+    interfaz.py                Interfaz Tkinter (ventana, controles, eventos)
+    graphics.py                Creacion y actualizacion de la grafica
+  logic/
+    LinealEquation.py          Red para funcion lineal
+    SquareEquation.py          Red para funcion cuadratica
+    CubicEquation.py           Red para funcion cubica
+    LogarithmicEquation.py     Red para funcion logaritmica
+    ExponentialEquation.py     Red para funcion exponencial
+    TrigonometricEquation.py   Red para funcion trigonometrica (seno)
+    CircleEquation.py          Red para circunferencia
+    RadicalEquation.py         Red para funcion radical
+    AbsoluteEquation.py        Red para valor absoluto
+    main.py                    Demo por consola de la red cuadratica
 ```
 
-## Modelo matematico
+Cada clase en `logic/` implementa el mismo esquema:
+- `forward()`: prediccion de la red.
+- `loss()`: error cuadratico medio (MSE).
+- `backward()`: gradientes analiticos.
+- `actualizar()`: actualizacion de pesos por descenso de gradiente.
+- `prueba(n_epoch)`: bucle de entrenamiento y registro de detalles.
+- `getTextDetails()`: texto con el historial de entrenamiento.
 
-La red neuronal de 6 parametros define un campo de velocidades:
+## Detalles tecnicos
 
-```
-dx/dt = tanh(w1*x + w2*y + b1)
-dy/dt = tanh(w3*x + w4*y + b2)
-```
-
-El entrenamiento minimiza la perdida (MSE entre trayectoria predicha y objetivo)
-usando descenso de gradiente por diferencias finitas:
-
-```
-grad(L)/grad(wi) ~ [L(w + eps*ei) - L(w)] / eps
-```
-
-## Presets disponibles
-
-| Preset | Pesos | Comportamiento |
-|--------|-------|----------------|
-| circulo | [0, -1, 1, 0, 0, 0] | Rotacion pura |
-| espiral_entrada | [-0.1, -1, 1, -0.1, 0, 0] | Espiral convergente |
-| espiral_salida | [0.1, -1, 1, 0.1, 0, 0] | Espiral divergente |
-| punto_fijo | [-1, 0, 0, -1, 0, 0] | Nodo estable |
-| oscilacion | [-0.2, -0.8, 0.8, -0.2, 0.1, -0.1] | Oscilacion amortiguada |
-| caos | [0.5, -1.2, 1.3, 0.3, 0.2, -0.1] | Comportamiento complejo |
-
-## Tests
-
-```bash
-# Tests unitarios (33 tests)
-python -m pytest tests/test_solver.py -v
-
-# Tests de integracion (12 tests)
-python -m pytest tests/test_integration.py -v
-
-# Todos los tests
-python -m pytest tests/ -v
-```
-
-## Conexion con Ecuaciones Diferenciales
-
-El proyecto demuestra 2 EDOs simultaneas:
-
-1. **Sistema dinamico** (la trayectoria): `dz/dt = F_theta(z)` - EDO en el espacio de estados
-2. **Aprendizaje** (el entrenamiento): `dW/dt = -grad(L(W))` - EDO en el espacio de pesos
-
-Ambas se resuelven numericamente con los mismos metodos:
-- **Euler explicito**: Simple pero puede divergir con LR grande
-- **Runge-Kutta 4**: Mas estable y preciso
-
-Referencia: Chen et al. (2018) "Neural Ordinary Differential Equations" - NeurIPS 2018.
+- La red es un modelo pequeno con parametros `w`, `b` (y `z` cuando aplica),
+  inicializados de forma aleatoria con `numpy.random.randn()`.
+- El entrenamiento minimiza el MSE entre la prediccion y los datos objetivo.
+- Tasa de aprendizaje (learning rate): `0.1` en la mayoria de funciones,
+  `0.05` en exponencial y trigonometrica, `0.01` en circunferencia.
+- La interfaz no requiere conexion a internet ni servicios externos.
 
 ## Autores
 
