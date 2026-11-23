@@ -25,31 +25,73 @@ los parametros aprendidos en cada iteracion.
 - `numpy`
 - `matplotlib`
 - `tkinter` (incluido con Python en la mayoria de instalaciones)
+- En Linux, si la ventana no abre por falta de fuentes, instala un paquete de
+  fuentes (por ejemplo `ttf-dejavu` en Arch o `fonts-dejavu` en Debian/Ubuntu).
 
 ## Instalacion
 
+Se recomienda crear un **entorno virtual** para aislar las dependencias del
+proyecto y ejecutarlo de forma segura (sin afectar otras instalaciones de Python).
+
+1. Clona el repositorio y entra en la carpeta del proyecto:
+
 ```bash
 git clone https://github.com/yonier-dev/proyecto-redes-neuronales-ed.git
-cd proyecto-redes-neuronales-ed/project
-pip install numpy matplotlib
+cd proyecto-redes-neuronales-ed
+```
+
+2. Crea y activa un entorno virtual.
+
+**Linux / macOS:**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+**Windows (PowerShell):**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+**Windows (CMD):**
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+3. Instala las dependencias dentro del entorno virtual:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ## Uso
 
 ```bash
-# Ejecutar la aplicacion (desde la carpeta project/)
-python main.py
+# Ejecutar la aplicacion (desde la raiz del repositorio)
+python project/main.py
 ```
 
 En Linux/macOS puede ser necesario usar `python3`:
 
 ```bash
-python3 main.py
+python3 project/main.py
+```
+
+Tambien puedes ejecutarla desde la carpeta `project/`:
+
+```bash
+cd project
+python main.py
 ```
 
 ## Como usar la aplicacion
 
-1. Ejecuta `python main.py`.
+1. Ejecuta `python project/main.py` (o `python main.py` desde `project/`).
 2. En **Selecciona Tipo de Funcion a Entrenar** elige la funcion que quieres que la red aprenda.
 3. Escribe en **Veces que Quiero Entrenar La redNeuronal** el numero de iteraciones (epochs).
 4. Ingresa los coeficientes objetivo en **W**, **B** y, si la funcion lo requiere, **W2**.
@@ -98,7 +140,6 @@ project/
     CircleEquation.py          Red para circunferencia
     RadicalEquation.py         Red para funcion radical
     AbsoluteEquation.py        Red para valor absoluto
-    main.py                    Demo por consola de la red cuadratica
 ```
 
 Cada clase en `logic/` implementa el mismo esquema:
